@@ -1,9 +1,19 @@
 <script setup>
-    import { ref } from 'vue';
+    import { ref, onMounted, computed} from 'vue';
     import LineItem from './LineItem.vue';
     
     const date = ref(null)
     const narration = ref(null)
+    const accounts = ref(null)
+    const total = computed(() => {
+        let val = 0
+    
+        lineItems.value.forEach(item => {
+            val += Number(item.amount)
+        });
+
+        return val
+    })
 
     const lineItems = ref([
         { account: null, description: '', amount: null }
@@ -13,18 +23,24 @@
         lineItems.value.push({ account: null, description: '', amount: null })
     }
 
-    
     function deleteItem(index) {
         lineItems.value.splice(index, 1)
     }
 
     function saveJournal() {
-        let total = 0
         lineItems.value.forEach(item => {
-            total += Number(item.amount)
+            console.log(`${item.account} - ${item.description} - ${Number(item.amount).toFixed(2)}`)
         });
-        console.log(total)
     }
+
+    onMounted(async () => {
+        try {
+          const response  = await fetch(`/api/accounts`)
+          accounts.value = await response.json();       
+        } catch (error) {
+            console.error(error)
+        }
+    });
 
 </script>
 
@@ -43,18 +59,22 @@
             </div>
         </div>
     </div>
-    
+    <p class="fw-bold fs-5 text-end px-3 m-0" :class="total === 0 ? 'text-secondary' : 'text-danger'">
+        Out of balance by: {{
+            total >= 0 ? `$${total.toLocaleString('en-AU', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` :  `-$${Math.abs(total).toLocaleString('en-AU', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+        }}
+    </p>
     <table class="table table-hover align-middle">
         <thead >
             <tr>
-                <th class="col-3 col-md-2">Account</th>
+                <th class="col-3 col-md-3">Account</th>
                 <th class="col-5 col-md-7">Description</th>
                 <th class="col-3 col-md-2">Amount</th>
                 <th class="col-1 col-md-1"></th>
             </tr>
         </thead>
         <tbody>
-            <LineItem v-for="(item, index) in lineItems" :key="index" v-model="lineItems[index]" @delete="deleteItem(index)"></LineItem>
+            <LineItem v-for="(item, index) in lineItems" :key="index" v-model="lineItems[index]" :accounts="accounts" @delete="deleteItem(index)"></LineItem>
 
             <tr>
                 <td colspan="5" class="text-center p-0">
