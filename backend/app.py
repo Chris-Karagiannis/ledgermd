@@ -15,6 +15,7 @@ account_manager = AccountManager(data_access)
 def index(path):
     return send_from_directory(app.static_folder, 'index.html')
 
+# Get accounts list
 @app.get("/api/accounts")
 def get_accounts():
     accounts = account_manager.get_accounts_list()
