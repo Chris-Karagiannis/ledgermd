@@ -29,8 +29,10 @@ CREATE TABLE IF NOT EXISTS Journals (
 
 CREATE TABLE IF NOT EXISTS Entries (
     id INTEGER PRIMARY KEY,
-    journal_id INTEGER,
+    journal_id INTEGER NOT NULL,
+    account_id INTEGER NOT NULL,
     description TEXT NOT NULL,
     amount REAL NOT NULL,
-    FOREIGN KEY(journal_id) REFERENCES Journals(id)
+    FOREIGN KEY(journal_id) REFERENCES Journals(id),
+    FOREIGN KEY(account_id) REFERENCES Accounts(id)
 );

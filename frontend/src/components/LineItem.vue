@@ -12,7 +12,7 @@
 <template>
     <tr>
         <td>
-            <select class="form-select" aria-label="Default select example" v-model="model.account">
+            <select class="form-select" aria-label="Default select example" v-model="model.account_id">
                 <option :value="null" disabled><span class="text-muted">Select</span></option>
                 <option v-for="acc in accounts" :key="acc.id" :value="acc.id">{{ acc.id }} - {{ acc.name }}</option>
             </select>

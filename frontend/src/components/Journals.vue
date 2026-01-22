@@ -3,17 +3,18 @@
     import LineItem from './LineItem.vue';
     import Tooltip from './Tooltip.vue';
     
+    const error = ref(null)
     const date = ref(null)
     const narration = ref(null)
     const accounts = ref(null)
     const total = ref(0)
 
     const lineItems = ref([
-        { account: null, description: '', amount: null }
+        { account_id: null, description: '', amount: null }
     ])
 
     function addItem() {
-        lineItems.value.push({ account: null, description: '', amount: null })
+        lineItems.value.push({ account_id: null, description: '', amount: null })
     }
 
     function sumTotal() {
@@ -23,17 +24,36 @@
             val += Number(item.amount)
         });
 
-        total.value = val
+        return val
     }
 
     function deleteItem(index) {
         lineItems.value.splice(index, 1)
     }
 
-    function saveJournal() {
-        lineItems.value.forEach(item => {
-            console.log(`${item.account} - ${item.description} - ${Number(item.amount).toFixed(2)}`)
-        });
+    async function saveJournal() {
+        try {
+            const body = {date: date.value, narration: narration.value, entries: lineItems.value}
+            const response = await fetch("/api/post-journal", {
+                method: "POST",
+                body: JSON.stringify(body),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+            
+            
+            const result = await response.json();
+            if (!response.ok) {
+                error.value = result
+                throw new Error(`Response status: ${response.status}`)
+            }
+            
+            window.location.reload()
+
+        } catch (error) {
+            console.error(error)
+        }
     }
 
     onMounted(async () => {
@@ -63,6 +83,11 @@
             </div>
         </div>
     </div>
+
+    <div v-if="error" class="alert alert-danger d-flex align-items-center" role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i>
+        {{ error.message }}
+    </div>
     <p class="fw-bold fs-5 text-end px-3 m-0" :class="total === 0 ? 'text-secondary' : 'text-danger'">
         Out of balance by: {{
             total >= 0 ? `$${total.toLocaleString('en-AU', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` :  `-$${Math.abs(total).toLocaleString('en-AU', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
@@ -80,7 +105,7 @@
             </tr>
         </thead>
         <tbody>
-            <LineItem v-for="(item, index) in lineItems" :key="index" v-model="lineItems[index]" :accounts="accounts" @delete="deleteItem(index)" @total="sumTotal"></LineItem>
+            <LineItem v-for="(item, index) in lineItems" :key="index" v-model="lineItems[index]" :accounts="accounts" @delete="deleteItem(index)" @total="total = sumTotal()"></LineItem>
 
             <tr>
                 <td colspan="5" class="text-center p-0">

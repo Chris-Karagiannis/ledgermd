@@ -14,7 +14,7 @@ class SQLConnection:
 
         return cls._instance
     
-    def __init__(self, path: str = "data.db"):
+    def __init__(self, path: str = "./files/data.db"):
         """Creates SQLite connection if it has not been established yet."""
 
         if self._connection is None:
