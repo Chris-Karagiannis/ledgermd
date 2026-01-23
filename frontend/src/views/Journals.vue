@@ -1,7 +1,8 @@
 <script setup>
-    import { ref, onMounted, computed} from 'vue';
-    import LineItem from './LineItem.vue';
-    import Tooltip from './Tooltip.vue';
+    import { ref, onMounted } from 'vue';
+    import LineItem from '@/components/LineItem.vue';
+    import Tooltip from '@/components/Tooltip.vue';
+    
     
     const error = ref(null)
     const date = ref(null)
@@ -29,6 +30,7 @@
 
     function deleteItem(index) {
         lineItems.value.splice(index, 1)
+        total.value = sumTotal()
     }
 
     async function saveJournal() {
@@ -49,11 +51,21 @@
                 throw new Error(`Response status: ${response.status}`)
             }
             
+            // Probably need to change this to something else when I figure how I'll setup everythin
             window.location.reload()
 
         } catch (error) {
             console.error(error)
         }
+    }
+
+    function formatTotal(total) {
+        if (total >= 0) {
+            return `$${total.toLocaleString('en-AU', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`   
+        } else {
+            return `-$${Math.abs(total).toLocaleString('en-AU', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+        }
+        
     }
 
     onMounted(async () => {
@@ -68,7 +80,10 @@
 </script>
 
 <template>
-    
+    <div class="px-1 mb-4">
+        <i class="bi bi-pencil-square fs-3 me-2"></i>
+        <span class="h3">Create Journal Entry</span>
+    </div>
     <div class="card mb-4 border-0 shadow-sm">
         <div class="card-body bg-light rounded">
             <div class="row g-3">
@@ -84,16 +99,15 @@
         </div>
     </div>
 
-    <div v-if="error" class="alert alert-danger d-flex align-items-center" role="alert">
+    <div v-if="error" class="alert alert-danger d-flex align-items-center mx-2" role="alert">
         <i class="bi bi-exclamation-triangle me-2"></i>
         {{ error.message }}
     </div>
     <p class="fw-bold fs-5 text-end px-3 m-0" :class="total === 0 ? 'text-secondary' : 'text-danger'">
-        Out of balance by: {{
-            total >= 0 ? `$${total.toLocaleString('en-AU', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` :  `-$${Math.abs(total).toLocaleString('en-AU', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-        }}
+        Out of balance by: {{ formatTotal(total) }}
     </p>
-    <table class="table table-hover align-middle">
+
+    <table class="table table-hover align-middle border mt-2">
         <thead >
             <tr>
                 <th class="col-3 col-md-3">Account</th>
@@ -117,15 +131,14 @@
         </tbody>
     </table>
 
-    <div class="pb-5 mb-5">
-    </div>
-
-    <div class="fixed-bottom bg-white border-top p-3 shadow-lg">
-        <div class="d-flex justify-content-end gap-2 m-0">
-            <button class="btn btn-primary px-5 fw-bold" @click="saveJournal">Save</button>
-            <button class="btn btn-light px-5">Cancel</button>
+    <div class="position-fixed bottom-0 end-0 p-4" style="z-index: 1050;">
+    <div class="card shadow-lg border-0 bg-white p-2">
+        <div class="d-flex gap-2">
+            <button class="btn btn-primary px-4" @click="saveJournal">Save</button>
+            <!-- <button class="btn btn-link text-black text-decoration-none">Cancel</button> -->
         </div>
     </div>
+</div>
     
 </template>
 
