@@ -35,12 +35,12 @@ def post_journal():
 def render_markdown():
     data =  request.get_json()
     markdown = data["markdown"]
-    print(markdown)
     rendered_markdown = report_manager.render_report(markdown)
     return jsonify({"markdown": rendered_markdown})
 
 @app.errorhandler(Exception)
 def unhandled_error(e):
+    print(e)
     response = {"message": str(e)}
     return jsonify(response), 500
 

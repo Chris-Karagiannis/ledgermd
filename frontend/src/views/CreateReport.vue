@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, nextTick } from 'vue'
 import { marked } from 'marked'
 
 const markdownText = ref(`# New Report Title`)
@@ -23,8 +23,20 @@ async function renderReport() {
         }
         
         renderedHtml.value = marked.parse(result.markdown)
+        await nextTick();
+        formatReport();
+
     } catch (error) {
         console.error(error)
+    }
+
+    function formatReport() {
+        // Make table look nice
+        const tables = document.querySelectorAll("table")
+        
+        tables.forEach(table => {
+             table.classList.add("table", "border", "table-hover")
+        });
     }
 }
 

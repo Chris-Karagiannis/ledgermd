@@ -1,0 +1,27 @@
+# Convert currency string format
+{% macro currency(amount) -%}
+{%- set amount = amount | float -%}
+{%- if amount < 0 -%}
+${{ "{:,.2f}".format(amount | abs) }} CR
+{%- else -%}
+${{ "{:,.2f}".format(amount) }} DR
+{%- endif -%}
+{%- endmacro %}
+
+# Get all account balances
+{% macro account_balances(show_zero_values=False) -%}
+| Account | Balance |
+|---------|--------|
+{%- for id, value in accounts.items() %}
+{%- set amount = value.amount | float %}
+  {%- if amount != 0 or show_zero_values %}
+| {{ value.name }} | {{ currency(value.amount) }} |
+  {%- endif %}
+{%- endfor %}
+{%- endmacro %}
+
+# Get specific account balance
+{% macro account(id) -%}
+    {{ currency(accounts[id].amount) }}
+{%- endmacro %}
+

@@ -13,7 +13,7 @@ class JournalTotal(Validator):
         for entry in data:
             if not entry["amount"]:
                 entry["amount"] = 0
-            total += entry["amount"]
+            total += float(entry["amount"])
 
 
         if total != self.total:

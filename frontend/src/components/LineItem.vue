@@ -21,7 +21,7 @@
             <input type="text" class="form-control" v-model="model.description">
         </td>
         <td>
-            <input type="number" class="form-control text-end" placeholder="0.00" v-model="model.amount" @blur="formatAmount; $emit('total')">
+            <input type="number" class="form-control text-end" placeholder="0.00" v-model="model.amount" @blur="formatAmount(); $emit('total')">
         </td>
         <td>
             <button class="btn btn-danger" @click="$emit('delete')">

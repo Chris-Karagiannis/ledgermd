@@ -7,5 +7,6 @@ class ReportManager:
 
     def render_report(self, markdown: str):
         account_balances = self.data_access.get_all_account_balances()
+        markdown = '{% from "macros.j2" import account, account_balances with context %}\n' + markdown
         rendered_markdown = render_template_string(markdown, accounts=account_balances)
         return rendered_markdown
