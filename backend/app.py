@@ -2,6 +2,7 @@ from flask import Flask, send_from_directory, jsonify, request
 from src.resource_access.data_access import SQLDataAccess
 from src.business_logic.account_manager import AccountManager
 from src.business_logic.journal_manager import JournalManager
+from src.business_logic.report_manager import ReportManager
 
 dist_path = "../frontend/dist"
 app = Flask(__name__, static_folder=dist_path, static_url_path='')
@@ -9,6 +10,7 @@ app = Flask(__name__, static_folder=dist_path, static_url_path='')
 data_access = SQLDataAccess()
 account_manager = AccountManager(data_access)
 journal_manager = JournalManager(data_access)
+report_manager = ReportManager(data_access)
 
 # Serve HTML
 @app.route('/', defaults={'path': ''})
@@ -28,6 +30,14 @@ def post_journal():
     date, narration, entries = data["date"], data["narration"], data["entries"]
     journal_id = journal_manager.post_journal(date, narration, entries)
     return jsonify({"journal_id": journal_id})
+
+@app.post("/api/render-markdown")
+def render_markdown():
+    data =  request.get_json()
+    markdown = data["markdown"]
+    print(markdown)
+    rendered_markdown = report_manager.render_report(markdown)
+    return jsonify({"markdown": rendered_markdown})
 
 @app.errorhandler(Exception)
 def unhandled_error(e):

@@ -31,4 +31,15 @@ class SQLDataAccess(DataAccessInterface):
         self.connection.commit()
 
         return journal_id
-            
+
+    def get_all_account_balances(self):
+        cursor = self.connection.cursor()
+        sql = """
+            SELECT SUM(E.amount) AS total, A.id, A.name FROM Entries AS E
+            JOIN Accounts AS A ON A.id = E.account_id
+            GROUP BY A.id, A.name
+        """
+        cursor.execute(sql)
+        rows = cursor.fetchall()
+        account_balances = {row["id"]: {"name": row["name"], "amount": row["total"]} for row in rows}
+        return account_balances

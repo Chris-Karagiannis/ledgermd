@@ -8,3 +8,7 @@ class DataAccessInterface(ABC):
     @abstractmethod
     def create_journal(self, date: str, narration: str, entries: list[dict]):
         pass
+
+    @abstractmethod
+    def get_all_account_balances(self):
+        pass

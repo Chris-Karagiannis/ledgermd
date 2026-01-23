@@ -6,7 +6,26 @@ const markdownText = ref(`# New Report Title`)
 const renderedHtml = ref(null)
 
 async function renderReport() {
-    renderedHtml.value = marked.parse(markdownText.value)
+    try {
+        const body = {"markdown": markdownText.value}
+        const response = await fetch("/api/render-markdown", {
+            method: "POST",
+            body: JSON.stringify(body),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`)
+        }
+        
+        renderedHtml.value = marked.parse(result.markdown)
+    } catch (error) {
+        console.error(error)
+    }
 }
 
 </script>
@@ -31,7 +50,7 @@ async function renderReport() {
 .markdown-editor {
   display: flex;
   flex-direction: column;
-  height: 85vh;
+  height: 80vh;
 }
 
 .toolbar {
