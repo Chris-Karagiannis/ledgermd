@@ -74,3 +74,8 @@ CREATE TABLE IF NOT EXISTS Entries (
     FOREIGN KEY(journal_id) REFERENCES Journals(id),
     FOREIGN KEY(account_id) REFERENCES Accounts(id)
 );
+
+CREATE TABLE IF NOT EXISTS Reports (
+    id INTEGER PRIMARY KEY,
+    markdown TEXT NOT NULL
+);

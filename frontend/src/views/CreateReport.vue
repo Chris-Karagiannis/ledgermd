@@ -1,14 +1,41 @@
 <script setup>
 import { ref, nextTick } from 'vue'
 import { marked } from 'marked'
+import { useRouter } from 'vue-router';
+import { formatReport } from '@/utils/formatReport';
 
+const router = useRouter()
 const markdownText = ref(`# New Report Title`)
 const renderedHtml = ref(null)
 
-async function renderReport() {
+// TODO: Need to figure out how to have a title for report, could use frontmatter or just have a text box.
+async function saveReport() {
+  try {
+    const body = {"markdown": markdownText.value}
+        const response = await fetch("/api/save-report", {
+            method: "POST",
+            body: JSON.stringify(body),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        const result = await response.json();
+        router.push(`/view-report?id=${result.report_id}`)
+
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`)
+        }
+
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+async function previewReport() {
     try {
         const body = {"markdown": markdownText.value}
-        const response = await fetch("/api/render-markdown", {
+        const response = await fetch("/api/preview-markdown", {
             method: "POST",
             body: JSON.stringify(body),
             headers: {
@@ -30,27 +57,21 @@ async function renderReport() {
         console.error(error)
     }
 
-    function formatReport() {
-        // Make table look nice
-        const tables = document.querySelectorAll("table")
-        
-        tables.forEach(table => {
-             table.classList.add("table", "border", "table-hover")
-        });
-    }
 }
 
 </script>
 
 <template>
+    
     <div class="px-1 mb-4">
         <i class="bi bi-file-earmark-code fs-3 me-2"></i>
         <span class="h3">Create Report</span>
     </div>
-    <div class="toolbar mb-2 d-flex gap-2">
-      <button class="btn btn-sm btn-primary" @click="renderReport">Render</button>
+    <div class="toolbar mb-2 d-flex gap-2 justify-content-between">
+      <button class="btn btn-primary" @click="saveReport">Save</button>
+      <button class="btn btn-secondary" @click="previewReport">Preview</button>
     </div>
-    <div class="markdown-editor d-flex flex-column">
+    <div class="markdown-editor d-flex flex-column h-100">
         <div class="d-flex flex-grow-1 border rounded overflow-hidden">
         <textarea v-model="markdownText" class="form-control flex-grow-1 border-0 p-3" style="resize: none;" placeholder="Write your markdown here..."></textarea>      
         <div class="preview flex-grow-1 p-3 border-start overflow-auto" v-html="renderedHtml"></div>

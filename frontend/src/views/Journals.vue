@@ -80,6 +80,7 @@
 </script>
 
 <template>
+    <div class="page-scroll">
     <div class="px-1 mb-4">
         <i class="bi bi-pencil-square fs-3 me-2"></i>
         <span class="h3">Create Journal Entry</span>
@@ -106,7 +107,6 @@
     <p class="fw-bold fs-5 text-end px-3 m-0" :class="total === 0 ? 'text-secondary' : 'text-danger'">
         Out of balance by: {{ formatTotal(total) }}
     </p>
-
     <table class="table table-hover align-middle border mt-2">
         <thead >
             <tr>
@@ -130,17 +130,21 @@
             </tr>
         </tbody>
     </table>
-
-    <div class="position-fixed bottom-0 end-0 p-4" style="z-index: 1050;">
-    <div class="card shadow-lg border-0 bg-white p-2">
-        <div class="d-flex gap-2">
-            <button class="btn btn-primary px-4" @click="saveJournal">Save</button>
-            <!-- <button class="btn btn-link text-black text-decoration-none">Cancel</button> -->
+    </div>
+    <div class="position-fixed bottom-0 end-0 p-4"> 
+        <div class="card shadow-lg border-0 bg-white p-2">
+            <div class="d-flex gap-2">
+                <button class="btn btn-primary px-4" @click="saveJournal">Save</button>
+            </div>
         </div>
     </div>
-</div>
     
 </template>
 
 
-<style scoped></style>
+<style scoped>
+.page-scroll {
+  height: 100%;
+  overflow-y: auto;
+}
+</style>

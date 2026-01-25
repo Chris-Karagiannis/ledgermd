@@ -16,7 +16,7 @@ class SQLDataAccess(DataAccessInterface):
         accounts = [Account(row["id"], row["name"], row["type"]) for row in rows]
         return accounts
     
-    def create_journal(self, date: str, narration: str, entries: list[dict]):
+    def create_journal(self, date: str, narration: str, entries: list[dict]) -> int:
         cursor = self.connection.cursor()
 
         sql = "INSERT INTO Journals (date, narration) VALUES (?, ?)"
@@ -32,7 +32,7 @@ class SQLDataAccess(DataAccessInterface):
 
         return journal_id
 
-    def get_all_account_balances(self):
+    def get_all_account_balances(self) -> dict:
         cursor = self.connection.cursor()
         sql = """
             SELECT SUM(E.amount) AS total, A.id, A.name FROM Entries AS E
@@ -43,3 +43,20 @@ class SQLDataAccess(DataAccessInterface):
         rows = cursor.fetchall()
         account_balances = {row["id"]: {"name": row["name"], "amount": row["total"]} for row in rows}
         return account_balances
+    
+    def create_report(self, markdown: str) -> int:
+        # TODO: Need to also save report titles.
+        cursor = self.connection.cursor()
+        sql = "INSERT INTO Reports (markdown) VALUES (?)"
+        cursor.execute(sql, (markdown, ))
+        report_id = cursor.lastrowid
+        self.connection.commit()
+        return report_id
+
+    def get_report(self, report_id: int) -> str:
+        cursor = self.connection.cursor()
+        sql = "SELECT * FROM Reports WHERE id = ?"
+        cursor.execute(sql, (report_id, ))
+        row = cursor.fetchone()
+        markdown = row["markdown"] if row else None
+        return markdown

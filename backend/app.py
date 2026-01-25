@@ -31,11 +31,23 @@ def post_journal():
     journal_id = journal_manager.post_journal(date, narration, entries)
     return jsonify({"journal_id": journal_id})
 
-@app.post("/api/render-markdown")
-def render_markdown():
+@app.post("/api/preview-markdown")
+def preview_markdown():
     data =  request.get_json()
     markdown = data["markdown"]
-    rendered_markdown = report_manager.render_report(markdown)
+    rendered_markdown = report_manager.preview_report(markdown)
+    return jsonify({"markdown": rendered_markdown})
+
+@app.post("/api/save-report")
+def save_report():
+    data =  request.get_json()
+    markdown = data["markdown"]
+    report_id = report_manager.save_report(markdown)
+    return jsonify({"report_id": report_id})
+
+@app.get("/api/view-report/<id>")
+def view_report(id):
+    rendered_markdown = report_manager.view_report(id)
     return jsonify({"markdown": rendered_markdown})
 
 @app.errorhandler(Exception)

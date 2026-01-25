@@ -8,24 +8,31 @@
         <ul class="nav nav-flush flex-column mb-auto">
             <li class="nav-item">
                 <router-link to="/" class="nav-link link-body-emphasis" exact-active-class="active">
-                <i class="bi bi-pencil-square me-1"></i>
-                Create Journal Entry
+                    <i class="bi bi-pencil-square me-1"></i>
+                    Create Journal Entry
                 </router-link>
             </li>
 
             <li class="nav-item">
                 <router-link to="/create-report" class="nav-link link-body-emphasis" exact-active-class="active">
-                <i class="bi bi-file-earmark-code me-1"></i>
-                Create Report
+                    <i class="bi bi-file-earmark-code me-1"></i>
+                    Create Report
                 </router-link>
             </li>
-
+            
+            <hr>
+            <div class="small fw-semibold text-muted px-3 mb-1">
+                Reports
+            </div>
+            
+            <!-- TODO: Need to figure out how to render saved reports in sidebar here with titles. -->
             <li class="nav-item">
-                <router-link to="/view-report" class="nav-link link-body-emphasis" exact-active-class="active">
-                <i class="bi bi-file-earmark me-1"></i>
-                View Report
-                </router-link>
+                <button class="nav-link link-body-emphasis pb-0" exact-active-class="active" data-bs-toggle="collapse" data-bs-target="#collapseReports" aria-expanded="false" aria-controls="collapseReports">
+                    <i class="bi bi-file-earmark me-1"></i>
+                    View Report
+                </button>
             </li>
+            
         </ul>
     </div>
 </template>
