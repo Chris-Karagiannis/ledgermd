@@ -1,5 +1,6 @@
 <script setup>
     import { ref, onMounted } from 'vue';
+    import { useRouter } from 'vue-router';
     import LineItem from '@/components/LineItem.vue';
     import Tooltip from '@/components/Tooltip.vue';
     
@@ -9,6 +10,7 @@
     const narration = ref(null)
     const accounts = ref(null)
     const total = ref(0)
+    const router = useRouter();
 
     const lineItems = ref([
         { account_id: null, description: '', amount: null }
@@ -44,15 +46,14 @@
                 }
             });
             
-            
             const result = await response.json();
+
             if (!response.ok) {
                 error.value = result
                 throw new Error(`Response status: ${response.status}`)
             }
             
-            // Probably need to change this to something else when I figure how I'll setup everythin
-            window.location.reload()
+            router.go(0);
 
         } catch (error) {
             console.error(error)

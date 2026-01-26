@@ -1,4 +1,4 @@
-from flask import Flask, send_from_directory, jsonify, request
+from flask import Flask, send_from_directory, jsonify, request, send_file
 from src.resource_access.data_access import SQLDataAccess
 from src.business_logic.account_manager import AccountManager
 from src.business_logic.journal_manager import JournalManager
