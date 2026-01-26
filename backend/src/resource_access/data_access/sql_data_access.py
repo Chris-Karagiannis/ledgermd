@@ -44,11 +44,10 @@ class SQLDataAccess(DataAccessInterface):
         account_balances = {row["id"]: {"name": row["name"], "amount": row["total"]} for row in rows}
         return account_balances
     
-    def create_report(self, markdown: str) -> int:
-        # TODO: Need to also save report titles.
+    def create_report(self, title: str, markdown: str) -> int:
         cursor = self.connection.cursor()
-        sql = "INSERT INTO Reports (markdown) VALUES (?)"
-        cursor.execute(sql, (markdown, ))
+        sql = "INSERT INTO Reports (title, markdown) VALUES (?, ?)"
+        cursor.execute(sql, (title, markdown))
         report_id = cursor.lastrowid
         self.connection.commit()
         return report_id
@@ -60,3 +59,11 @@ class SQLDataAccess(DataAccessInterface):
         row = cursor.fetchone()
         markdown = row["markdown"] if row else None
         return markdown
+    
+    def get_all_reports(self) -> list:
+        cursor = self.connection.cursor()
+        sql = "SELECT id, title FROM Reports"
+        cursor.execute(sql)
+        rows = cursor.fetchall()
+        reports = [{"id": row["id"], "title": row["title"]} for row in rows]
+        return reports

@@ -7,7 +7,7 @@ import ViewReport from './views/ViewReport.vue';
 const routes = [
     { path: '/', component: Journals },
     { path: '/create-report', component: CreateReport },
-    { path: '/view-report', component: ViewReport },
+    { path: '/view-report/:id', component: ViewReport },
     { path: '/:pathMatch(.*)*', component: NotFound }
 ]
 

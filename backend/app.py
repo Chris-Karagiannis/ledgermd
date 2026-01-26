@@ -41,14 +41,19 @@ def preview_markdown():
 @app.post("/api/save-report")
 def save_report():
     data =  request.get_json()
-    markdown = data["markdown"]
-    report_id = report_manager.save_report(markdown)
+    markdown, title = data["markdown"], data["title"]
+    report_id = report_manager.save_report(title, markdown)
     return jsonify({"report_id": report_id})
 
 @app.get("/api/view-report/<id>")
 def view_report(id):
     rendered_markdown = report_manager.view_report(id)
     return jsonify({"markdown": rendered_markdown})
+
+@app.get("/api/list-reports")
+def list_reports():
+    reports = report_manager.list_reports()
+    return jsonify(reports)
 
 @app.errorhandler(Exception)
 def unhandled_error(e):

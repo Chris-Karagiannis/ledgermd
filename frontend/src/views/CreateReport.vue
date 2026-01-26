@@ -3,15 +3,17 @@ import { ref, nextTick } from 'vue'
 import { marked } from 'marked'
 import { useRouter } from 'vue-router';
 import { formatReport } from '@/utils/formatReport';
+import { listReports } from '@/utils/listReports';
 
 const router = useRouter()
 const markdownText = ref(`# New Report Title`)
 const renderedHtml = ref(null)
+const title = ref(null)
+const error = ref(null)
 
-// TODO: Need to figure out how to have a title for report, could use frontmatter or just have a text box.
 async function saveReport() {
   try {
-    const body = {"markdown": markdownText.value}
+    const body = {"markdown": markdownText.value, "title": title.value}
         const response = await fetch("/api/save-report", {
             method: "POST",
             body: JSON.stringify(body),
@@ -21,11 +23,13 @@ async function saveReport() {
         });
 
         const result = await response.json();
-        router.push(`/view-report?id=${result.report_id}`)
-
+        
         if (!response.ok) {
-            throw new Error(`Response status: ${response.status}`)
+          error.value = result
+          throw new Error(`Response status: ${response.status}`)
         }
+        listReports()
+        router.push(`/view-report/${result.report_id}`)
 
   } catch (error) {
     console.error(error)
@@ -62,17 +66,24 @@ async function previewReport() {
 </script>
 
 <template>
-    
     <div class="px-1 mb-4">
         <i class="bi bi-file-earmark-code fs-3 me-2"></i>
         <span class="h3">Create Report</span>
     </div>
+      <div v-if="error" class="alert alert-danger d-flex align-items-center mx-2" role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i>
+        {{ error.message }}
+    </div>
+
     <div class="toolbar mb-2 d-flex gap-2 justify-content-between">
-      <button class="btn btn-primary" @click="saveReport">Save</button>
+      <div class="input-group w-50">
+        <input v-model="title"  class="form-control"  placeholder="Report title"/>
+        <button class="btn btn-primary" @click="saveReport">Save</button>
+      </div>
       <button class="btn btn-secondary" @click="previewReport">Preview</button>
     </div>
-    <div class="markdown-editor d-flex flex-column h-100">
-        <div class="d-flex flex-grow-1 border rounded overflow-hidden">
+    <div class="markdown-editor d-flex flex-column h-100">  
+      <div class="d-flex flex-grow-1 border rounded overflow-hidden">
         <textarea v-model="markdownText" class="form-control flex-grow-1 border-0 p-3" style="resize: none;" placeholder="Write your markdown here..."></textarea>      
         <div class="preview flex-grow-1 p-3 border-start overflow-auto" v-html="renderedHtml"></div>
         </div>

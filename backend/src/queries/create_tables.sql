@@ -43,7 +43,7 @@ INSERT OR IGNORE INTO Accounts (id, name, type) VALUES
 INSERT OR IGNORE INTO Accounts (id, name, type) VALUES
     (400, 'Service Revenue', 4),
     (410, 'Interest Income', 4),
-    (420, 'Sales', 4), -- already had 200 as Sales, could skip
+    (420, 'Sales', 4),
     (430, 'Rental Income', 4);
 
 -- EXPENSES
@@ -54,7 +54,7 @@ INSERT OR IGNORE INTO Accounts (id, name, type) VALUES
     (530, 'Supplies Expense', 5),
     (540, 'Insurance Expense', 5),
     (550, 'Depreciation Expense', 5),
-    (560, 'Fuel & Oil', 5), -- already exists
+    (560, 'Fuel & Oil', 5),
     (570, 'Advertising Expense', 5),
     (580, 'Travel Expense', 5),
     (590, 'Bank Fees', 5);
@@ -77,5 +77,6 @@ CREATE TABLE IF NOT EXISTS Entries (
 
 CREATE TABLE IF NOT EXISTS Reports (
     id INTEGER PRIMARY KEY,
+    title TEXT NOT NULL,
     markdown TEXT NOT NULL
 );

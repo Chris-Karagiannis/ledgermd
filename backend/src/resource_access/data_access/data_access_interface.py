@@ -14,9 +14,13 @@ class DataAccessInterface(ABC):
         pass
 
     @abstractmethod
-    def create_report(self, markdown: str) -> int:
+    def create_report(self, title:str, markdown: str) -> int:
         pass
 
     @abstractmethod
     def get_report(self, report_id: int) -> str:
+        pass
+
+    @abstractmethod
+    def get_all_reports(self) -> list:
         pass

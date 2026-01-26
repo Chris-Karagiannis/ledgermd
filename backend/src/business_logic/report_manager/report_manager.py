@@ -11,8 +11,11 @@ class ReportManager:
         rendered_markdown = self.render_report_engine.render_report(markdown, account_balances)
         return rendered_markdown
 
-    def save_report(self, markdown: str):
-        report_id = self.data_access.create_report(markdown)
+    def save_report(self, title: str, markdown: str):
+        if not title:
+            raise Exception("Report title not entered.")
+
+        report_id = self.data_access.create_report(title, markdown)
         return report_id
     
     def view_report(self, report_id: int):
@@ -23,3 +26,7 @@ class ReportManager:
             return rendered_markdown
         else:
             return None
+        
+    def list_reports(self):
+        reports = self.data_access.get_all_reports()
+        return reports
