@@ -12,12 +12,6 @@ account_manager = AccountManager(data_access)
 journal_manager = JournalManager(data_access)
 report_manager = ReportManager(data_access)
 
-# Serve HTML
-@app.route('/', defaults={'path': ''})
-@app.route("/<string:path>")
-def index(path):
-    return send_from_directory(app.static_folder, 'index.html')
-
 # Get accounts list
 @app.get("/api/accounts")
 def get_accounts():
@@ -55,8 +49,16 @@ def list_reports():
     reports = report_manager.list_reports()
     return jsonify(reports)
 
+# Serve HTML
+@app.route('/', defaults={'path': ''})
+@app.route("/<string:path>")
+def index(path):
+    return send_from_directory(app.static_folder, 'index.html')
+
 @app.errorhandler(Exception)
 def unhandled_error(e):
+    if type(e).__name__ == "NotFound":
+        return send_from_directory(app.static_folder, 'index.html')
     print(e)
     response = {"message": str(e)}
     return jsonify(response), 500

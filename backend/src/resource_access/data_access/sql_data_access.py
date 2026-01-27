@@ -1,6 +1,7 @@
 from .data_access_interface import DataAccessInterface
 from .sql_connection import SQLConnection
-from src.business_logic.models import Account, Entry
+from src.business_logic.models import Account
+from collections import defaultdict
 
 class SQLDataAccess(DataAccessInterface):
     def __init__(self):
@@ -67,3 +68,23 @@ class SQLDataAccess(DataAccessInterface):
         rows = cursor.fetchall()
         reports = [{"id": row["id"], "title": row["title"]} for row in rows]
         return reports
+
+    def get_all_account_details(self) -> dict:
+        cursor = self.connection.cursor()
+        sql = """
+            SELECT * FROM Entries AS E
+            JOIN Journals AS J ON J.id = E.journal_id
+        """
+        cursor.execute(sql)
+        rows = cursor.fetchall()
+        account_details = defaultdict(list)
+        for row in rows:
+            entry = {
+                "date": row["date"], 
+                "narration": row["narration"] if row["narration"] else "", 
+                "description": row["description"], 
+                "amount": row["amount"]
+            }
+            account_details[row["account_id"]].append(entry)
+
+        return account_details

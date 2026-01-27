@@ -25,3 +25,12 @@ ${{ "{:,.2f}".format(amount) }} DR
     {{ currency(accounts[id].amount) }}
 {%- endmacro %}
 
+# Show account entry details
+{% macro account_details(id) -%}
+| Date | Narration | Description | Amount |
+|------|-----------|-------------|--------|
+{%- for value in entries[id] %}
+{%- set amount = value.amount | float %}
+| {{ value.date }} | {{ value.narration }} | {{ value.description }} | {{ currency(value.amount) }} |
+{%- endfor %}
+{%- endmacro %}

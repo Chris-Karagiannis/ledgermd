@@ -67,7 +67,7 @@
 </script>
 
 <template>
-    <div class="preview overflow-auto" ref="reportPreview" v-html="renderedHtml"></div>
+    <div class="preview overflow-auto py-3 px-1" ref="reportPreview" v-html="renderedHtml"></div>
     <div class="w-100 py-3"></div>
     <div class="position-fixed bottom-0 end-0 p-4"> 
         <div class="card shadow-lg border-0 bg-white p-2">

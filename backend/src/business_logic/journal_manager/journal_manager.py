@@ -11,9 +11,7 @@ class JournalManager:
             raise Exception("No transaction date entered.")
         
         self.entry_validation.validate(entries)
-
-        #TODO: Probably should check if the accounts exist.
-
+        
         journal_id = self.data_access.create_journal(date, narration, entries)
         
         return journal_id

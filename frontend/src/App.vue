@@ -18,7 +18,7 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
-  min-height: 0;       /* 🔑 required for nested scrolling */
-  overflow: hidden;    /* prevent double scrollbars */
+  min-height: 0;
+  overflow: hidden;
 }
 </style>

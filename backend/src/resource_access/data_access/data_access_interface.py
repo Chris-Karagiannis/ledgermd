@@ -24,3 +24,7 @@ class DataAccessInterface(ABC):
     @abstractmethod
     def get_all_reports(self) -> list:
         pass
+
+    @abstractmethod
+    def get_all_account_details(self) -> dict:
+        pass
