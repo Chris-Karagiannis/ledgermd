@@ -39,10 +39,17 @@ def save_report():
     report_id = report_manager.save_report(title, markdown)
     return jsonify({"report_id": report_id})
 
+@app.post("/api/update-report/<id>")
+def update_report(id):
+    data =  request.get_json()
+    markdown, title = data["markdown"], data["title"]
+    report_id = report_manager.update_report(id, title, markdown)
+    return jsonify({"report_id": report_id})
+
 @app.get("/api/view-report/<id>")
 def view_report(id):
-    rendered_markdown = report_manager.view_report(id)
-    return jsonify({"markdown": rendered_markdown})
+    report = report_manager.view_report(id)
+    return jsonify(report)
 
 @app.get("/api/list-reports")
 def list_reports():

@@ -9,7 +9,8 @@
     const reportPreview = ref(null)
     const route = useRoute()
     const router = useRouter()
-    const id = route.params.id
+    let id = route.params.id
+    let editPath = `/edit-report/${id}`
 
     async function downloadReport() {
         const element = reportPreview.value;
@@ -44,7 +45,6 @@
                 router.push(`/`)
                 throw new Error(`Response status: ${response.status}`)
             }
-                
             renderedHtml.value = marked.parse(result.markdown)
             await nextTick();
             formatReport();     
@@ -61,6 +61,8 @@
         () => route.params.id,
         (newId) => {
             loadReport(newId)
+            id = newId
+            editPath = `/edit-report/${id}`
         }
     )
 
@@ -76,10 +78,10 @@
                     <i class="bi bi-download"></i>
                     Download
                 </button>
-                <button class="btn btn-secondary px-2">
+                <router-link :to="editPath" class="btn btn-secondary px-2">
                     <i class="bi bi-pencil"></i>
                     Edit
-                </button>
+                </router-link>
             </div>
         </div>
     </div>

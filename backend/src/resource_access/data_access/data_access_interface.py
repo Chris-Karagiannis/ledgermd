@@ -28,3 +28,7 @@ class DataAccessInterface(ABC):
     @abstractmethod
     def get_all_account_details(self) -> dict:
         pass
+
+    @abstractmethod
+    def update_report(self, id, title, markdown) -> int:
+        pass

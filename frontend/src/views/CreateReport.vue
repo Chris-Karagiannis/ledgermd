@@ -53,6 +53,6 @@ async function saveReport() {
         {{ error.message }}
     </div>
 
-    <MarkdownEditor @save="handleSave"/>
+    <MarkdownEditor text="# Hello" @save="handleSave"/>
 
 </template>

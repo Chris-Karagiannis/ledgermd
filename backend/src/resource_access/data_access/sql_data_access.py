@@ -58,8 +58,8 @@ class SQLDataAccess(DataAccessInterface):
         sql = "SELECT * FROM Reports WHERE id = ?"
         cursor.execute(sql, (report_id, ))
         row = cursor.fetchone()
-        markdown = row["markdown"] if row else None
-        return markdown
+        report = {"title": row["title"], "markdown": row["markdown"]}
+        return report
     
     def get_all_reports(self) -> list:
         cursor = self.connection.cursor()
@@ -88,3 +88,18 @@ class SQLDataAccess(DataAccessInterface):
             account_details[row["account_id"]].append(entry)
 
         return account_details
+
+    def update_report(self, id: int, title: str, markdown: str) -> int:
+        cursor = self.connection.cursor()
+        sql = """
+            UPDATE Reports
+            SET title = ?, markdown = ?
+            WHERE id = ?
+        """
+        cursor.execute(sql, (title, markdown, id))
+
+        if cursor.rowcount == 0:
+            return None
+        
+        self.connection.commit()
+        return id

@@ -1,64 +1,54 @@
 <script setup>
-import { ref, nextTick } from 'vue'
-import { marked } from 'marked'
-import { useRouter } from 'vue-router';
-import { formatReport } from '@/utils/formatReport';
+    import { ref, nextTick, onMounted } from 'vue'
+    import { marked } from 'marked'
+    import { formatReport } from '@/utils/formatReport';
+    import { defineProps } from 'vue';
 
-const markdownText = ref(`# New Report Title`)
-const renderedHtml = ref(null)
-const title = ref(null)
-
-// async function saveReport() {
-//   try {
-//     const body = {"markdown": markdownText.value, "title": title.value}
-//         const response = await fetch("/api/save-report", {
-//             method: "POST",
-//             body: JSON.stringify(body),
-//             headers: {
-//                 "Content-Type": "application/json"
-//             }
-//         });
-
-//         const result = await response.json();
-        
-//         if (!response.ok) {
-//           error.value = result
-//           throw new Error(`Response status: ${response.status}`)
-//         }
-//         listReports()
-//         router.push(`/view-report/${result.report_id}`)
-
-//   } catch (error) {
-//     console.error(error)
-//   }
-// }
-
-async function previewReport() {
-    try {
-        const body = {"markdown": markdownText.value}
-        const response = await fetch("/api/preview-markdown", {
-            method: "POST",
-            body: JSON.stringify(body),
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
-
-        const result = await response.json();
-
-        if (!response.ok) {
-            throw new Error(`Response status: ${response.status}`)
+    const props = defineProps({
+        text: {
+            type: String,
+            default: '# New Report Title'
+        },
+        title : {
+            type: String
         }
-        
-        renderedHtml.value = marked.parse(result.markdown)
-        await nextTick();
-        formatReport();
+    });
 
-    } catch (error) {
-        console.error(error)
+    const markdownText = ref(props.text)
+    const renderedHtml = ref(null)
+    const title = ref(props.title)
+
+    async function previewReport() {
+        try {
+            const body = {"markdown": markdownText.value}
+            const response = await fetch("/api/preview-markdown", {
+                method: "POST",
+                body: JSON.stringify(body),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(`Response status: ${response.status}`)
+            }
+            
+            renderedHtml.value = marked.parse(result.markdown)
+            await nextTick();
+            formatReport();
+
+        } catch (error) {
+            console.error(error)
+        }
+
     }
 
-}
+    onMounted(async () => {
+        await previewReport()
+    });
+
 </script>
 
 <template>
