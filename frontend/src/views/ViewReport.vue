@@ -72,7 +72,14 @@
     <div class="position-fixed bottom-0 end-0 p-4"> 
         <div class="card shadow-lg border-0 bg-white p-2">
             <div class="d-flex gap-2">
-                <button class="btn btn-primary px-4" @click="downloadReport">Download</button>
+                <button class="btn btn-primary px-4" @click="downloadReport">
+                    <i class="bi bi-download"></i>
+                    Download
+                </button>
+                <button class="btn btn-secondary px-2">
+                    <i class="bi bi-pencil"></i>
+                    Edit
+                </button>
             </div>
         </div>
     </div>
