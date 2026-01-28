@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
+from src.business_logic.models import Account
 
 class DataAccessInterface(ABC):
     @abstractmethod
-    def get_all_accounts(self):
+    def get_all_accounts(self)  -> list[Account]:
         pass
 
     @abstractmethod

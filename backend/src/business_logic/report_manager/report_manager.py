@@ -6,18 +6,18 @@ class ReportManager:
         self.data_access = data_access
         self.render_report_engine = RenderReportEngine(data_access)
 
-    def preview_report(self, markdown: str):
+    def preview_report(self, markdown: str) -> str:
         rendered_markdown = self.render_report_engine.render_report(markdown)
         return rendered_markdown
 
-    def save_report(self, title: str, markdown: str):
+    def save_report(self, title: str, markdown: str) -> int:
         if not title:
             raise Exception("Report title not entered.")
 
         report_id = self.data_access.create_report(title, markdown)
         return report_id
 
-    def update_report(self, id: int, title: str, markdown: str):
+    def update_report(self, id: int, title: str, markdown: str) -> int:
         if not title:
             raise Exception("Report title not entered.")
 
@@ -26,8 +26,8 @@ class ReportManager:
     
     def view_report(self, report_id: int) -> dict:
         report = self.data_access.get_report(report_id)
-        title, markdown = report["title"], report["markdown"]
-        if markdown:
+        if report:
+            title, markdown = report["title"], report["markdown"]
             rendered_markdown = self.render_report_engine.render_report(markdown)
             result = {"title": title, "markdown": rendered_markdown, "raw": markdown}
             return result

@@ -6,7 +6,7 @@ class SQLConnection:
     _instance = None
     _connection = None
 
-    def __new__(cls):
+    def __new__(cls, path: str = "./files/data.db"):
         """Ensures only one instance can be created."""
 
         if cls._instance is None:

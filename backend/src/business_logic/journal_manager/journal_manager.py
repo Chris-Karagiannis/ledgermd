@@ -6,7 +6,7 @@ class JournalManager:
         self.entry_validation = ValidationChain([JournalTotal(), ContainsAccount()])
         self.data_access = data_access
 
-    def post_journal(self, date: str, narration: str, entries: list[dict]):
+    def post_journal(self, date: str, narration: str, entries: list[dict]) -> int:
         if not date:
             raise Exception("No transaction date entered.")
         

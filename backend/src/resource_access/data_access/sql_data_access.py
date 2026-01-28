@@ -4,10 +4,10 @@ from src.business_logic.models import Account
 from collections import defaultdict
 
 class SQLDataAccess(DataAccessInterface):
-    def __init__(self):
-        self.connection = SQLConnection().get_connection()
+    def __init__(self, path: str = "./files/data.db"):
+        self.connection = SQLConnection(path).get_connection()
     
-    def get_all_accounts(self):
+    def get_all_accounts(self) -> list[Account]:
         cursor = self.connection.cursor()
 
         sql = "SELECT * FROM Accounts"
@@ -58,7 +58,7 @@ class SQLDataAccess(DataAccessInterface):
         sql = "SELECT * FROM Reports WHERE id = ?"
         cursor.execute(sql, (report_id, ))
         row = cursor.fetchone()
-        report = {"title": row["title"], "markdown": row["markdown"]}
+        report = {"title": row["title"], "markdown": row["markdown"]} if row else None
         return report
     
     def get_all_reports(self) -> list:
@@ -66,7 +66,7 @@ class SQLDataAccess(DataAccessInterface):
         sql = "SELECT id, title FROM Reports"
         cursor.execute(sql)
         rows = cursor.fetchall()
-        reports = [{"id": row["id"], "title": row["title"]} for row in rows]
+        reports = [{"id": row["id"], "title": row["title"]} for row in rows] if rows else None
         return reports
 
     def get_all_account_details(self) -> dict:
@@ -99,7 +99,7 @@ class SQLDataAccess(DataAccessInterface):
         cursor.execute(sql, (title, markdown, id))
 
         if cursor.rowcount == 0:
-            return None
+            raise Exception("Could not update report.")
         
         self.connection.commit()
         return id
