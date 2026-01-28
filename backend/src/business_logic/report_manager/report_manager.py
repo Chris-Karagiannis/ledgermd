@@ -11,14 +11,14 @@ class ReportManager:
         return rendered_markdown
 
     def save_report(self, title: str, markdown: str) -> int:
-        if not title:
+        if not title or title == "":
             raise Exception("Report title not entered.")
 
         report_id = self.data_access.create_report(title, markdown)
         return report_id
 
     def update_report(self, id: int, title: str, markdown: str) -> int:
-        if not title:
+        if not title or title == "":
             raise Exception("Report title not entered.")
 
         report_id = self.data_access.update_report(id, title, markdown)

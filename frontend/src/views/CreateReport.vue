@@ -17,7 +17,7 @@ async function handleSave(text, reportTitle) {
 
 async function saveReport() {
   try {
-    const body = {"markdown": markdownText.value, "title": title.value}
+    const body = {"markdown": markdownText.value, "title": title.value ? title.value : ""}
         const response = await fetch("/api/save-report", {
             method: "POST",
             body: JSON.stringify(body),

@@ -1,0 +1,8 @@
+**/node_modules
+frontend/dist
+**/.vscode
+**/__pycache__
+**/.pytest_cache
+backend/htmlcov
+backend/venv
+backend/.coverage
