@@ -2,7 +2,6 @@
     import { ref, onMounted } from 'vue';
     import { useRouter } from 'vue-router';
     import LineItem from '@/components/LineItem.vue';
-    import Tooltip from '@/components/Tooltip.vue';
     
     
     const error = ref(null)
@@ -13,6 +12,7 @@
     const router = useRouter();
 
     const lineItems = ref([
+        { account_id: null, description: '', amount: null },
         { account_id: null, description: '', amount: null }
     ])
 
@@ -115,9 +115,7 @@
                 <tr>
                     <th class="col-3 col-md-3">Account</th>
                     <th class="col-5 col-md-7">Description</th>
-                    <th class="col-3 col-md-2">
-                        <Tooltip text="Negative values represent credits. Positive values represent debits.">Amount</Tooltip>
-                    </th>
+                    <th class="col-3 col-md-2">Amount</th>
                     <th class="col-1 col-md-1"></th>
                 </tr>
             </thead>
