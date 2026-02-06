@@ -43,16 +43,18 @@ async function saveReport() {
 </script>
 
 <template>
-    <div class="px-1 mb-4">
-        <i class="bi bi-file-earmark-code fs-3 me-2"></i>
-        <span class="h3">Create Report</span>
-    </div>
+    <main class="content-area py-4 px-2">
+        <div class="page-title px-1 mb-4">
+            <i class="bi bi-file-earmark-code fs-3"></i>
+            <span class="h3 m-0">Create Report</span>
+        </div>
 
-    <div v-if="error" class="alert alert-danger d-flex align-items-center mx-2" role="alert">
-        <i class="bi bi-exclamation-triangle me-2"></i>
-        {{ error.message }}
-    </div>
+        <div v-if="error" class="alert alert-danger d-flex align-items-center mx-2" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            {{ error.message }}
+        </div>
 
-    <MarkdownEditor @save="handleSave"/>
-
+        <MarkdownEditor @save="handleSave"/>
+    </main>
 </template>
+

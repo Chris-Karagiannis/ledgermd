@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <main class="content-area py-4 px-2">
     <p>Page Not Found</p>
-  </div>
+  </main>
 </template>
