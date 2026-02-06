@@ -53,8 +53,6 @@ async function saveReport() {
             <i class="bi bi-exclamation-triangle me-2"></i>
             {{ error.message }}
         </div>
-
-        <MarkdownEditor @save="handleSave"/>
+        <MarkdownEditor @save="handleSave" @err="error = $event"/>
     </main>
 </template>
-

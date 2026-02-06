@@ -13,7 +13,11 @@ class ReportManager:
     def save_report(self, title: str, markdown: str) -> int:
         if not title or title == "":
             raise Exception("Report title not entered.")
-
+        try:
+            rendered_markdown = self.render_report_engine.render_report(markdown)
+        except Exception as e:
+            raise Exception("Invalid syntax")
+        
         report_id = self.data_access.create_report(title, markdown)
         return report_id
 

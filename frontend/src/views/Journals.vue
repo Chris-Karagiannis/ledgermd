@@ -26,8 +26,9 @@
         lineItems.value.forEach(item => {
             val += Number(item.amount)
         });
-
-        return val
+        
+        // round to cents to avoid floating point issues
+        return Math.round(val * 100) / 100 
     }
 
     function deleteItem(index) {

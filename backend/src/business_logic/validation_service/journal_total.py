@@ -15,6 +15,7 @@ class JournalTotal(Validator):
                 entry["amount"] = 0
             total += float(entry["amount"])
 
+        total = round(total, 2)
 
         if total != self.total:
             return "Journal entry is not balanced."

@@ -14,12 +14,15 @@
         }
     });
 
+    const emit = defineEmits(['err']) 
+
     const markdownText = ref(props.text)
     const renderedHtml = ref(null)
     const title = ref(props.title)
 
     async function previewReport() {
         try {
+
             const body = {"markdown": markdownText.value}
             const response = await fetch("/api/preview-markdown", {
                 method: "POST",
@@ -32,9 +35,10 @@
             const result = await response.json();
 
             if (!response.ok) {
+                emit('err', result)
                 throw new Error(`Response status: ${response.status}`)
             }
-            
+            emit('err', null)
             renderedHtml.value = marked.parse(result.markdown)
             await nextTick();
             formatReport();
@@ -72,7 +76,8 @@
 .markdown-editor {
   display: flex;
   flex-direction: column;
-  height: 80vh;
+  height: 65vh;
+  max-height: 65vh;
 }
 
 .toolbar {

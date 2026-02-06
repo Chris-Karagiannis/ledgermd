@@ -75,9 +75,9 @@
 
 <template>
     <main class="content-area py-4 px-2">
-        <div class="px-1 mb-4">
-            <i class="bi bi-file-earmark-code fs-3 me-2"></i>
-            <span class="h3">Edit Report</span>
+        <div class="page-title px-1 mb-4">
+            <i class="bi bi-file-earmark-code fs-3"></i>
+            <span class="h3 m-0">Edit Report</span>
         </div>
 
         <div v-if="error" class="alert alert-danger d-flex align-items-center mx-2" role="alert">
@@ -85,6 +85,7 @@
             {{ error.message }}
         </div>
         
-        <MarkdownEditor v-if="markdownText" :text="markdownText" :title="title" @save="handleSave"/>
+        <MarkdownEditor v-if="markdownText" :text="markdownText" :title="title" @save="handleSave" @err="error = $event"/>
     </main>
 </template>
+
